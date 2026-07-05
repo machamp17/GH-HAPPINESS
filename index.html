@@ -1,0 +1,1640 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<title>GHハピネス立川 — トップページ（V3 × A）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    /* Morning Park palette: 水色の空、草木の緑、朝の柔らかさ */
+    --w-paper: #f4faf3;       /* ふんわりした早朝の白い緑 */
+    --w-ink: #2f4a3a;         /* 墨黒ではなく深い権色寄りのグリーン */
+    --w-ink-soft: #6b8877;
+    --w-ink-muted: #b9cdbd;
+    --w-tint: #e5f0dd;        /* 草原のハイライト */
+    --w-accent: #7cb342;      /* 黄緑・新葉 */
+    --w-accent2: #4fb3c9;     /* 朝の水色 */
+    --w-sky: #cfe8ef;         /* 淡い水色 */
+    --w-peach: #fff4c7;       /* 朝日の黄色 */
+    --w-photo-bg: #d6e6d1;
+    --w-radius: 10px;
+    --w-btn-radius: 999px;
+    --w-serif: "Zen Maru Gothic", "Klee One", "Noto Serif JP", ui-serif, serif;
+  }
+  [data-mood="park"]   { --w-paper:#f4faf3; --w-ink:#2f4a3a; --w-ink-soft:#6b8877; --w-ink-muted:#b9cdbd; --w-tint:#e5f0dd; --w-accent:#7cb342; --w-accent2:#4fb3c9; --w-sky:#cfe8ef; --w-peach:#fff4c7; --w-photo-bg:#d6e6d1; }
+  [data-mood="sky"]    { --w-paper:#f2f8fb; --w-ink:#23445a; --w-ink-soft:#5e7e93; --w-ink-muted:#b3c8d4; --w-tint:#dbebf2; --w-accent:#4fb3c9; --w-accent2:#9cc95a; --w-sky:#d8ecf2; --w-peach:#fff2c2; --w-photo-bg:#cfe0e9; }
+  [data-mood="leaf"]   { --w-paper:#f6fbef; --w-ink:#2e4a28; --w-ink-soft:#6b8860; --w-ink-muted:#bcd0af; --w-tint:#e0efd2; --w-accent:#8cc152; --w-accent2:#6abfb4; --w-sky:#d5ece4; --w-peach:#fdf2b8; --w-photo-bg:#cce0ba; }
+  [data-mood="sage"]   { --w-paper:#faf6ee; --w-ink:#2e2a25; --w-ink-soft:#7a736b; --w-ink-muted:#b8afa3; --w-tint:#eae3d2; --w-accent:#6b8a5a; --w-accent2:#c97a4f; --w-sky:#d0dde0; --w-peach:#f2d9c4; --w-photo-bg:#d6cdb8; }
+
+  [data-stroke="sketchy"] .wire-sketch, [data-stroke="sketchy"] .wire-photo {
+    font-family: "Kalam", "Zen Kurenaido", "Klee One", "Yomogi", cursive !important;
+  }
+  [data-stroke="sketchy"] .wire-photo {
+    border-radius: 12px 8px 14px 6px / 8px 14px 6px 12px !important;
+    transform: rotate(-0.4deg);
+  }
+  [data-density="loose"] .page { --pad-y: 1.25; }
+  [data-density="tight"] .page { --pad-y: 0.78; }
+  [data-density="normal"] .page { --pad-y: 1; }
+
+  body {
+    margin: 0; background: linear-gradient(180deg, #efe9dc 0%, #f2ede1 100%); color: var(--w-ink);
+    font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Kaku Gothic ProN", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+  }
+  /* Accent characters inside headings — one character dyed for rhythm */
+  .accent-char { color: var(--w-accent2); font-style: normal; position:relative; display:inline-block; }
+  .accent-char.warm { color: var(--w-accent); }
+  .accent-char.pop  { color: #e89bb0; }
+  .accent-char.sun  { color: #f4c95d; }
+  .accent-char::after {
+    content:''; position:absolute; left:8%; right:8%; bottom:-6px; height:6px;
+    background: currentColor; opacity:.18; border-radius:6px; z-index:-1;
+  }
+  .accent-char.sun::after { display: none; }
+  .final .accent-char::after { display: none; }
+  .accent-ring {
+    display:inline-block; position:relative; padding: 0 .15em;
+  }
+  .accent-ring::before {
+    content:''; position:absolute; inset:-8% -12%; border-radius:50%;
+    background: radial-gradient(circle, rgba(244,201,93,.35) 0%, rgba(244,201,93,0) 70%);
+    z-index:-1;
+  }
+  .canvas { padding: 40px 0 80px; display: flex; flex-direction: column; align-items: center; }
+  .meta {
+    max-width: 960px; margin: 0 auto 28px; padding: 0 24px;
+  }
+  .meta .eyebrow { font-size:11px; letter-spacing:3px; color:#7a736b; text-transform:uppercase; }
+  .meta h1 { font-size: 28px; margin: 6px 0 10px; font-weight:700; }
+  .meta p { font-size: 13px; line-height: 1.8; color:#5a544c; margin:0; }
+  .meta .postit { margin-top:14px; padding:10px 14px; background:#fef4a8; border:1px solid #d8c864; border-radius:6px; font-size:12px; color:#5a4a2a; display:inline-block; }
+
+  .page {
+    width: 1024px; background: #f6f0e1;
+    box-shadow: 0 30px 80px -20px rgba(87,74,47,0.22), 0 10px 30px rgba(87,74,47,0.08), 0 2px 6px rgba(87,74,47,0.04);
+    overflow: hidden; border-radius: 24px;
+    position: relative;
+  }
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 32px; border-bottom: 1px solid rgba(120,95,55,0.14); background: #fffdf7;
+    position: sticky; top: 0; z-index: 5;
+  }
+  .nav .logo { display:flex; align-items:center; gap:10px; }
+  .nav .logo .mark-img { width:34px; height:38px; object-fit:contain; display:block; }
+  .nav .logo .mark { width:32px; height:32px; border-radius:50%; background:var(--w-accent); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px; }
+  .nav .logo .name { font-size:12px; font-weight:700; line-height:1.2; }
+  .nav .logo .name small { display:block; font-size:9px; font-weight:500; color:var(--w-ink-soft); }
+  .nav ul { display:flex; gap:18px; list-style:none; margin:0; padding:0; font-size:11px; }
+  .nav .cta { display:flex; gap:8px; align-items:center; font-size:11px; }
+  .btn {
+    display:inline-flex; align-items:center; gap:6px; padding:9px 16px; border-radius:999px;
+    font-size:11px; font-weight:700; border:1.5px solid var(--w-accent); background:var(--w-accent); color:#fff;
+    cursor:pointer; transition: transform .15s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn.ghost { background:transparent; color:var(--w-ink); border-color:var(--w-ink-muted); }
+  .btn.accent { background:var(--w-accent); border-color:var(--w-accent); color:#fff; }
+  .btn.soft { background:#fff; border-color:var(--w-accent); color:var(--w-accent); }
+  .btn.lg { padding:12px 22px; font-size:13px; }
+  .btn.md { padding:10px 18px; font-size:12px; }
+
+  /* HERO (V3) */
+  .hero { padding: 0; text-align: left; }
+  .hero .eyebrow { font-size:11px; letter-spacing:4px; color:var(--w-accent2); margin-bottom:16px; }
+  .hero {
+    background: var(--w-paper);
+    position: relative; overflow:hidden;
+  }
+  .hero-bg {
+    position: relative;
+    min-height: 620px;
+    background-image: url('assets/hero-watercolor.png');
+    background-size: cover;
+    background-position: center right;
+    background-repeat: no-repeat;
+    display: flex; align-items: center;
+    padding: 0 80px;
+  }
+  .hero-bg::before {
+    /* soften the left side so text reads well over any photo variation */
+    content:''; position:absolute; inset:0;
+    background: linear-gradient(90deg, rgba(255,250,240,0.55) 0%, rgba(255,250,240,0.15) 38%, rgba(255,250,240,0) 55%);
+    pointer-events:none;
+  }
+  .hero-bg::after {
+    /* melt the hero image bottom into the cream page so the next section joins softly */
+    content:''; position:absolute; left:0; right:0; bottom:0; height:84px;
+    background: linear-gradient(180deg, rgba(246,240,225,0) 0%, rgba(246,240,225,.55) 55%, #f6f0e1 100%);
+    pointer-events:none;
+  }
+  .hero-bg .hero-text {
+    position: relative; z-index: 2; max-width: 480px;
+  }
+  .hero-bg .hero-text .hero-logo {
+    display:block; width: 136px; height:auto; margin: 0 0 10px -10px;
+    filter: drop-shadow(0 4px 10px rgba(47,74,58,0.12));
+  }
+  .hero-bg .hero-text .eyebrow { color: var(--w-accent); margin-bottom: 18px; text-shadow: 0 1px 0 rgba(255,255,255,.7); }
+  .hero-bg .hero-text h2 {
+    text-align:left; margin: 0 0 22px;
+    text-shadow: 0 2px 0 rgba(255,255,255,.65), 0 1px 6px rgba(255,255,255,.5);
+  }
+  .hero-bg .hero-text .subcopy {
+    text-align:left; margin: 0 0 26px; max-width: none;
+    color: var(--w-ink); font-weight: 500;
+    text-shadow: 0 1px 0 rgba(255,255,255,.6);
+  }
+  .hero-bg .hero-text .ctas { justify-content: flex-start; margin: 0; }
+  .hero h2 {
+    font-size: 44px; line-height: 1.55; font-weight: 700; margin: 0 0 24px;
+    white-space: pre-line; letter-spacing: 0.5px;
+    font-family: var(--w-serif); color: var(--w-ink);
+    position: relative; z-index: 2;
+    text-shadow: 0 2px 0 rgba(255,255,255,.6);
+  }
+  .hero .subcopy { max-width: 560px; margin: 0 auto; font-size: 13px; line-height: 1.9; color: var(--w-ink-soft); }
+  .hero .ctas { display:flex; gap:12px; justify-content:center; margin-top:24px; }
+  .hero .photo-wrap { margin: 24px 44px 0; position: relative; z-index: 2; }
+  .hero .photo-wrap .wire-photo { transform: rotate(-0.5deg); }
+
+  .wire-photo {
+    background: var(--w-photo-bg);
+    border: none;
+    border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--w-ink-soft); font-size: 13px; letter-spacing: 1px; overflow: hidden;
+    background-image: repeating-linear-gradient(135deg, transparent 0 10px, rgba(47,74,58,0.05) 10px 11px);
+    box-shadow: 0 12px 28px -12px rgba(47,74,58,0.35), 0 4px 10px rgba(47,74,58,0.08);
+  }
+  .wire-photo .tag {
+    background: var(--w-paper); padding: 4px 10px;
+    border: 1px dashed var(--w-ink-soft); border-radius: 2px;
+  }
+  /* Real photo container */
+  .real-photo {
+    background: var(--w-photo-bg);
+    border-radius: 18px;
+    overflow: hidden;
+    display:block;
+    box-shadow: 0 12px 28px -12px rgba(47,74,58,0.35), 0 4px 10px rgba(47,74,58,0.08);
+  }
+  .real-photo img { display:block; width:100%; height:100%; object-fit: cover; }
+
+  .section-title { text-align:center; padding: calc(56px * var(--pad-y, 1)) 32px 8px; position:relative; }
+  .section-title .deco-people { display:block; margin:0 auto 14px; }
+  .section-title .eyebrow { font-size:11px; letter-spacing:3px; color:#c98a4f; margin-bottom:10px; text-transform:uppercase; }
+  .section-title h3 { font-size: 29px; font-weight:700; margin:0; font-family: var(--w-serif); color:var(--w-ink); letter-spacing:0.5px; }
+  .section-title p { font-size:13.5px; color:var(--w-ink-soft); margin:12px auto 0; max-width:560px; line-height:1.85; }
+
+  /* STORY / MISSION */
+  .mission { padding: 0 72px calc(32px * var(--pad-y, 1)); }
+  .mission-card {
+    border: none; border-radius: 28px; padding: 36px 44px;
+    background:
+      radial-gradient(ellipse at 8% 12%, rgba(255,210,140,0.55) 0%, rgba(255,210,140,0) 38%),
+      radial-gradient(ellipse at 92% 18%, rgba(170,210,230,0.45) 0%, rgba(170,210,230,0) 40%),
+      radial-gradient(ellipse at 18% 92%, rgba(245,180,170,0.40) 0%, rgba(245,180,170,0) 38%),
+      radial-gradient(ellipse at 88% 88%, rgba(190,215,160,0.45) 0%, rgba(190,215,160,0) 40%),
+      radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 60%),
+      linear-gradient(135deg, #fdf4e1 0%, #fbecd5 100%);
+    display: grid; grid-template-columns: 1fr 180px; gap: 32px; align-items: center;
+    position: relative; overflow: hidden;
+    transform: rotate(-0.6deg);
+    box-shadow: 0 24px 50px -20px rgba(47,74,58,0.28), 0 6px 16px rgba(47,74,58,0.08);
+  }
+  .mission-card::after {
+    /* watercolor paper grain */
+    content:''; position:absolute; inset:0; pointer-events:none; opacity:.18;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(255,255,255,.6) 0 1px, transparent 1.5px),
+      radial-gradient(circle at 70% 60%, rgba(0,0,0,.05) 0 1px, transparent 1.5px),
+      radial-gradient(circle at 40% 80%, rgba(255,255,255,.5) 0 1px, transparent 1.5px);
+    background-size: 6px 6px, 5px 5px, 7px 7px;
+    mix-blend-mode: overlay;
+  }
+  .mission-card > *:not(.mission-deco):not(.mission-blob) { transform: rotate(0.6deg); }
+  .mission-card .mission-blob {
+    position:absolute; left:-60px; top:-50px; width:180px; height:180px; border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.8), rgba(255,255,255,0) 70%);
+    pointer-events:none;
+  }
+  .mission-card .mission-deco {
+    position: absolute; right: 0px; bottom: -20px; opacity: .7; pointer-events:none;
+    filter: drop-shadow(0 8px 16px rgba(47,74,58,0.15));
+  }
+  .mission-card .mission-flower {
+    position:absolute; left: -40px; bottom: -40px; width: 140px; height: 140px;
+    opacity: .25; pointer-events:none;
+  }
+  .mission-quote { font-family: var(--w-serif); font-size:18px; line-height:1.9; color:var(--w-ink); }
+  .mission-quote .big { font-size:44px; color:var(--w-accent2); font-family:serif; display:block; line-height:0.6; margin-bottom:8px; }
+  .mission-quote .mission-sig { margin-top:14px; font-size:12px; color:var(--w-ink-soft); font-family: var(--w-serif); letter-spacing:1px; }
+  .mission-photo { height: 180px; }
+  .mission-photo img { object-position: center; }
+
+  /* FEATURES (A) */
+  .features { padding: 0 72px calc(24px * var(--pad-y, 1)); display:flex; flex-direction:column; gap: 18px; position:relative; }
+  .feature-card {
+    display: grid; grid-template-columns: 160px 1fr auto; gap: 28px;
+    padding: 22px 28px; border: none; border-radius: 22px;
+    align-items: center;
+    box-shadow: 0 14px 30px -14px rgba(47,74,58,0.25), 0 2px 6px rgba(47,74,58,0.06);
+    position: relative;
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .feature-card:nth-child(odd) { transform: rotate(-0.4deg); }
+  .feature-card:nth-child(even) { transform: rotate(0.4deg); }
+  .feature-card:nth-child(1) { background: linear-gradient(135deg, var(--w-tint) 0%, #f3f9ea 100%); }
+  .feature-card:nth-child(2) { background: linear-gradient(135deg, var(--w-sky) 0%, #e8f4f7 100%); }
+  .feature-card:nth-child(3) { background: linear-gradient(135deg, var(--w-peach) 0%, #fffbe5 100%); }
+  .feature-card:nth-child(4) { background: linear-gradient(135deg, #ffffff 0%, #f4faf3 100%); }
+  .feature-card::before {
+    content:''; position:absolute; inset:0; border-radius:inherit;
+    background: radial-gradient(ellipse at 0% 0%, rgba(255,255,255,.6), transparent 50%);
+    pointer-events:none;
+  }
+  .feature-card .img { height: 118px; transform: rotate(-1deg); }
+  .feature-card:nth-child(even) .img { transform: rotate(1deg); }
+  .feature-card .num {
+    display:inline-block; font-size: 12px; font-weight: 800; color:#fff;
+    background: var(--w-accent2); padding: 3px 10px; border-radius: 999px; letter-spacing: 1px;
+  }
+  .feature-card h4 { font-size: 17px; font-weight: 700; margin: 4px 0 8px; font-family: var(--w-serif); }
+  .feature-card p { font-size: 12px; color: var(--w-ink-soft); line-height: 1.8; margin: 0; }
+  .feature-card .more { font-size:10px; color:var(--w-accent); writing-mode:vertical-rl; letter-spacing:3px; }
+
+  /* DAY / 1日の流れ — watercolor cards */
+  .day { padding: 4px 56px calc(40px * var(--pad-y, 1)); position:relative; }
+  .day-flow-img { display:block; width: 100%; height:auto; border-radius: 0; }
+  .day:has(> .day-flow-img) { padding-left: 0; padding-right: 0; padding-bottom: 0; padding-top: 0; }
+  .features-img, .fee-img { display:block; width: 100%; height:auto; border-radius: 0; }
+  .features:has(> .features-img) { padding: 0; }
+  .fee:has(> .fee-img) { padding: 0; }
+  .letter { padding: 0; position:relative; }
+  .letter-img { display:block; width:100%; height:auto; border-radius: 0; }
+  .careplan { padding: 0; position: relative; }
+  .careplan-img { display:block; width:100%; height:auto; border-radius: 0; }
+  /* visit-flow image bleed */
+  .trial:has(.visit-flow) { padding: 0; }
+  .trial:has(.visit-flow) .visit-flow { border-radius: 0; box-shadow: none; aspect-ratio: auto; }
+  .trial:has(.visit-flow) .visit-flow-bg { position: static; width: 100%; height: auto; object-fit: contain; }
+
+  /* Seamless edges between full-bleed watercolor image sections */
+  .features:has(> .features-img),
+  .day:has(> .day-flow-img),
+  .fee:has(> .fee-img),
+  .letter,
+  .careplan,
+  .trial:has(.visit-flow) {
+    background-color: #f6f0e1; /* warm cream matching image edge backgrounds */
+  }
+  /* Eased S-curve fades: long gentle top, safe shorter bottom (content sits near some image bottoms) */
+  .features:has(> .features-img) > .features-img,
+  .day:has(> .day-flow-img) > .day-flow-img,
+  .fee:has(> .fee-img) > .fee-img,
+  .letter > .letter-img,
+  .careplan > .careplan-img {
+    -webkit-mask-image: linear-gradient(to bottom,
+      transparent 0, rgba(0,0,0,.18) 18px, rgba(0,0,0,.55) 40px, #000 72px,
+      #000 calc(100% - 44px), rgba(0,0,0,.55) calc(100% - 24px), rgba(0,0,0,.18) calc(100% - 10px), transparent 100%);
+            mask-image: linear-gradient(to bottom,
+      transparent 0, rgba(0,0,0,.18) 18px, rgba(0,0,0,.55) 40px, #000 72px,
+      #000 calc(100% - 44px), rgba(0,0,0,.55) calc(100% - 24px), rgba(0,0,0,.18) calc(100% - 10px), transparent 100%);
+  }
+  /* visit-flow: ribbon text sits close to the bottom — keep its bottom fade short */
+  .trial:has(.visit-flow) .visit-flow-bg {
+    -webkit-mask-image: linear-gradient(to bottom,
+      transparent 0, rgba(0,0,0,.18) 18px, rgba(0,0,0,.55) 40px, #000 72px,
+      #000 calc(100% - 20px), rgba(0,0,0,.4) calc(100% - 8px), transparent 100%);
+            mask-image: linear-gradient(to bottom,
+      transparent 0, rgba(0,0,0,.18) 18px, rgba(0,0,0,.55) 40px, #000 72px,
+      #000 calc(100% - 20px), rgba(0,0,0,.4) calc(100% - 8px), transparent 100%);
+  }
+  /* Cross-fade overlap: fades from adjacent sections blend inside the shared cream */
+  .features:has(> .features-img),
+  .day:has(> .day-flow-img),
+  .fee:has(> .fee-img),
+  .letter,
+  .careplan,
+  .trial:has(.visit-flow) {
+    margin-top: -30px;
+  }
+  /* The first image section (letter/mission) meets the cream fact bar — both cream, so no pull-up needed */
+  .factbar + .letter { margin-top: 0; }
+  .day .day-deco-leaf-l {
+    position:absolute; left: 34px; top: -8px; pointer-events:none; opacity:.55;
+  }
+  .day .day-deco-leaf-r {
+    position:absolute; right: 34px; top: -8px; pointer-events:none; opacity:.55; transform: scaleX(-1);
+  }
+  .day-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; position: relative;
+  }
+  .day-card {
+    background: #ffffff;
+    border-radius: 22px;
+    padding: 20px 14px 18px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 14px 32px -16px rgba(47,74,58,0.22), 0 2px 6px rgba(47,74,58,0.05);
+    display: flex; flex-direction: column; align-items: center;
+  }
+  /* arrow between cards */
+  .day-card + .day-card::before {
+    content:''; position:absolute; left:-15px; top: 56px;
+    width: 12px; height: 12px;
+    border-top: 1.5px dashed var(--w-ink-muted);
+    border-right: 1.5px dashed var(--w-ink-muted);
+    transform: rotate(45deg);
+  }
+  .day-card + .day-card::after {
+    content:''; position:absolute; left:-26px; top: 62px;
+    width: 16px; height: 0; border-top: 1.5px dashed var(--w-ink-muted);
+  }
+  .day-blob {
+    width: 78px; height: 78px; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    margin: 4px auto 6px;
+  }
+  .day-blob::before {
+    content:''; position:absolute; inset:-2px;
+    border-radius: 52% 48% 46% 54% / 50% 54% 46% 50%;
+    filter: blur(0.4px);
+    z-index: 0;
+  }
+  .day-blob .num {
+    font-family: var(--w-serif); font-size: 30px; font-weight: 700;
+    color: var(--w-ink); position: relative; z-index: 1; line-height: 1;
+  }
+  .day-icon {
+    width: 56px; height: 56px; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    margin: -4px auto 10px;
+  }
+  .day-icon::before {
+    content:''; position:absolute; inset:0;
+    border-radius: 48% 52% 54% 46% / 52% 46% 54% 48%;
+    opacity: .85;
+    z-index: 0;
+  }
+  .day-icon svg { position: relative; z-index: 1; }
+
+  /* per-step watercolor palettes */
+  .day-card.s1 .day-blob::before { background: radial-gradient(ellipse at 35% 35%, rgba(255,210,90,0.85), rgba(255,210,90,0.35) 55%, rgba(255,210,90,0.05) 78%); }
+  .day-card.s1 .day-icon::before { background: radial-gradient(ellipse at 40% 40%, rgba(255,210,90,0.7), rgba(255,210,90,0.15) 70%, transparent 85%); }
+  .day-card.s2 .day-blob::before { background: radial-gradient(ellipse at 35% 35%, rgba(155,200,120,0.85), rgba(155,200,120,0.35) 55%, rgba(155,200,120,0.05) 78%); }
+  .day-card.s2 .day-icon::before { background: radial-gradient(ellipse at 40% 40%, rgba(155,200,120,0.7), rgba(155,200,120,0.15) 70%, transparent 85%); }
+  .day-card.s3 .day-blob::before { background: radial-gradient(ellipse at 35% 35%, rgba(145,210,225,0.85), rgba(145,210,225,0.35) 55%, rgba(145,210,225,0.05) 78%); }
+  .day-card.s3 .day-icon::before { background: radial-gradient(ellipse at 40% 40%, rgba(145,210,225,0.7), rgba(145,210,225,0.15) 70%, transparent 85%); }
+  .day-card.s4 .day-blob::before { background: radial-gradient(ellipse at 35% 35%, rgba(248,188,140,0.85), rgba(248,188,140,0.35) 55%, rgba(248,188,140,0.05) 78%); }
+  .day-card.s4 .day-icon::before { background: radial-gradient(ellipse at 40% 40%, rgba(248,188,140,0.7), rgba(248,188,140,0.15) 70%, transparent 85%); }
+  .day-card.s5 .day-blob::before { background: radial-gradient(ellipse at 35% 35%, rgba(190,170,220,0.85), rgba(190,170,220,0.35) 55%, rgba(190,170,220,0.05) 78%); }
+  .day-card.s5 .day-icon::before { background: radial-gradient(ellipse at 40% 40%, rgba(190,170,220,0.7), rgba(190,170,220,0.15) 70%, transparent 85%); }
+
+  .day-photo {
+    width: 100%; aspect-ratio: 1/1; border-radius: 14px; overflow: hidden;
+    background: var(--w-photo-bg); margin: 2px 0 14px;
+  }
+  .day-photo img { width:100%; height:100%; object-fit: cover; display:block; }
+  .day-card .caption { font-size: 12px; line-height: 1.9; color: var(--w-ink); margin: 0; text-wrap: pretty; }
+  .day-card .leaves { margin-top: auto; padding-top: 12px; opacity: .55; }
+
+  /* FEE */
+  .fee { padding: 0 72px calc(32px * var(--pad-y, 1)); position:relative; }
+  .fee .fee-deco { position:absolute; right: 48px; top: -36px; opacity:.8; pointer-events:none; filter: drop-shadow(0 8px 16px rgba(47,74,58,0.15)); }
+  .fee-wrap {
+    border:none; border-radius:22px; overflow:hidden; background:#fff;
+    box-shadow: 0 24px 48px -18px rgba(47,74,58,0.24), 0 4px 12px rgba(47,74,58,0.06);
+    transform: rotate(0.3deg);
+  }
+  .fee-wrap > * { transform: rotate(-0.3deg); }
+  .fee-head { padding:22px 28px; background: linear-gradient(135deg, var(--w-sky), var(--w-tint)); display:flex; align-items:baseline; gap:20px; flex-wrap:wrap; }
+  .fee-head .ex { font-size:11px; color:var(--w-ink-soft); letter-spacing:2px; }
+  .fee-head .total { font-size:32px; font-weight:800; color:var(--w-ink); }
+  .fee-head .total small { font-size:12px; font-weight:500; color:var(--w-ink-soft); margin-left:8px; }
+  .fee-head .note { font-size:11px; color:var(--w-ink-soft); margin-left:auto; }
+  .fee-grid { display:grid; grid-template-columns: 1fr 1fr; gap:0; }
+  .fee-col { padding: 20px 24px; }
+  .fee-col + .fee-col { border-left: 1px dashed var(--w-ink-muted); }
+  .fee-col h6 { font-size:11px; letter-spacing:2px; color:var(--w-ink-soft); margin:0 0 10px; text-transform:uppercase; }
+  .fee-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom: 1px dashed var(--w-ink-muted); font-size:12px; }
+  .fee-row:last-child { border:none; }
+  .fee-row span:last-child { font-weight:700; font-variant-numeric: tabular-nums; }
+
+  /* TRIAL */
+  .trial { padding: 0 72px calc(32px * var(--pad-y, 1)); position:relative; }
+  .trial .trial-deco { position:absolute; left: 40px; top: -30px; opacity:.9; pointer-events:none; filter: drop-shadow(0 8px 18px rgba(47,74,58,0.18)); }
+  .visit-flow {
+    position: relative; width: 100%; aspect-ratio: 1672 / 940;
+    border-radius: 24px; overflow: hidden;
+    box-shadow: 0 24px 48px -18px rgba(47,74,58,0.24), 0 4px 12px rgba(47,74,58,0.06);
+  }
+  .visit-flow-bg { position:absolute; inset:0; width:100%; height:100%; object-fit: cover; display:block; }
+  .visit-flow-header {
+    position:absolute; left: 6%; right: 6%; top: 4%;
+    text-align: center;
+  }
+  .visit-flow-header .eyebrow {
+    font-size: 11px; letter-spacing: 3px; color: var(--w-accent); text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .visit-flow-header h3 {
+    font-family: var(--w-serif); font-size: 26px; font-weight: 700; margin: 0;
+    color: var(--w-ink); letter-spacing: 0.5px;
+  }
+  .visit-flow-header p {
+    font-size: 12px; color: var(--w-ink-soft); line-height: 1.8; margin: 6px auto 0;
+    max-width: 520px;
+  }
+  .visit-flow-step {
+    position:absolute; transform: translateY(0); text-align: center;
+    color: var(--w-ink);
+  }
+  .visit-flow-step h4 {
+    font-family: var(--w-serif); font-size: 17px; font-weight: 700;
+    margin: 0 0 6px; color: var(--w-ink);
+    text-shadow: 0 1px 0 rgba(255,255,255,.65);
+  }
+  .visit-flow-step p {
+    font-size: 11px; line-height: 1.75; color: var(--w-ink-soft); margin: 0;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+  }
+  .visit-flow-tagline {
+    position:absolute; left: 55%; top: 84.5%;
+    transform: translate(-50%, -50%);
+    width: 60%; max-width: 720px;
+    text-align: center; font-family: var(--w-serif);
+    font-size: 14px; line-height: 1.7; color: var(--w-ink); font-weight: 500;
+  }
+  .visit-cta { display:flex; gap:14px; justify-content:center; margin-top: 24px; }
+  .trial-card {
+    display:grid; grid-template-columns: 1.4fr 1fr; gap:0;
+    border:none; border-radius:24px; overflow:hidden;
+    box-shadow: 0 24px 48px -18px rgba(47,74,58,0.24), 0 4px 12px rgba(47,74,58,0.06);
+    transform: rotate(-0.4deg);
+    position: relative;
+  }
+  .trial-copy { padding: 32px 36px; background: var(--w-peach); }
+  .trial-copy .label { font-size:10px; letter-spacing:3px; color:var(--w-accent2); }
+  .trial-copy h4 { font-size:22px; font-weight:700; margin:8px 0 10px; font-family:var(--w-serif); }
+  .trial-copy .price { font-size:28px; font-weight:800; color:var(--w-ink); }
+  .trial-copy .price small { font-size:11px; font-weight:500; color:var(--w-ink-soft); margin-left:6px; }
+  .trial-copy ul { font-size:12px; color:var(--w-ink); line-height:1.9; padding-left: 18px; margin:14px 0; }
+  .trial-side { background: var(--w-paper); padding: 24px; display:flex; flex-direction:column; gap:10px; }
+  .trial-side h5 { font-size:11px; letter-spacing:2px; color:var(--w-ink-soft); text-transform:uppercase; margin:0; }
+  .trial-side .item { font-size:11px; color:var(--w-ink); padding:6px 0; border-bottom:1px dashed var(--w-ink-muted); }
+
+  /* ACCESS */
+  .access { padding: 8px 72px calc(56px * var(--pad-y, 1)); position:relative; }
+  .access-wrap { display:grid; grid-template-columns: 1.3fr 1fr; gap:22px; }
+  .map-box {
+    height: 300px; border:1px solid rgba(120,95,55,0.10); border-radius:24px; position:relative; overflow:hidden;
+    background:
+      radial-gradient(120% 90% at 12% 8%, rgba(244,201,93,.14), transparent 45%),
+      radial-gradient(120% 90% at 90% 92%, rgba(124,179,66,.12), transparent 48%),
+      #e9f2f0;
+    box-shadow: 0 18px 36px -22px rgba(120,95,55,0.38), 0 2px 8px rgba(120,95,55,0.05);
+  }
+  .map-box::before {
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background-image: repeating-linear-gradient(0deg, transparent 0 34px, rgba(47,74,58,0.045) 34px 35px), repeating-linear-gradient(90deg, transparent 0 34px, rgba(47,74,58,0.045) 34px 35px);
+  }
+  .map-box .pin { position:absolute; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:4px; }
+  .map-box .pin .dot { width:14px; height:14px; border-radius:50%; background:var(--w-accent); border:2px solid var(--w-paper); box-shadow:0 2px 6px rgba(0,0,0,0.2); }
+  .map-box .pin.main .dot { width:36px; height:36px; background:var(--w-accent2); display:flex; align-items:center; justify-content:center; color:#fff; font-size:10px; font-weight:700; }
+  .map-box .pin .label { font-size:10.5px; font-weight:600; background:#fffdf7; padding:3px 8px; border:1px solid rgba(120,95,55,0.16); border-radius:6px; white-space:nowrap; box-shadow: 0 2px 6px rgba(120,95,55,0.10); }
+  .access-info {
+    background:#fffdf7; border:1px solid rgba(120,95,55,0.10); border-radius:24px; padding: 26px 28px;
+    box-shadow: 0 18px 36px -22px rgba(120,95,55,0.38), 0 2px 8px rgba(120,95,55,0.05);
+  }
+  .access-info h5 { font-size:11px; letter-spacing:2.5px; color:#c98a4f; text-transform:uppercase; margin:0 0 12px; }
+  .access-info .addr { font-size:17px; font-weight:700; line-height:1.6; margin-bottom:8px; font-family: var(--w-serif); }
+  .access-info .tel { font-size:26px; font-weight:800; letter-spacing:-0.3px; color: var(--w-ink); }
+  .access-info .row { font-size:12.5px; padding:8px 0; border-bottom:1px dashed rgba(120,95,55,0.18); display:flex; justify-content:space-between; gap:12px; }
+  .access-info .row:last-child { border:none; }
+
+  /* FINAL CTA */
+  .final {
+    padding: calc(76px * var(--pad-y, 1)) 72px calc(68px * var(--pad-y, 1)); text-align:center;
+    background:
+      linear-gradient(180deg, #f1e9d6 0%, rgba(241,233,214,0) 110px),
+      radial-gradient(ellipse at 18% 118%, rgba(255,250,235,.30), transparent 55%),
+      radial-gradient(ellipse at 82% -18%, rgba(255,255,255,.32), transparent 55%),
+      linear-gradient(135deg, #8abb63 0%, #64b2c2 100%);
+    color:#fff; position:relative; overflow:hidden;
+  }
+  .final::before {
+    content:''; position:absolute; top:-60px; right:-60px; width:260px; height:260px;
+    border-radius:50%;
+    background: radial-gradient(circle at 35% 35%, rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 70%);
+  }
+  .final::after {
+    content:''; position:absolute; bottom:-80px; left:-60px; width:220px; height:220px;
+    border-radius:50%;
+    background: radial-gradient(circle at 35% 35%, rgba(255,244,199,.5) 0%, rgba(255,244,199,0) 70%);
+  }
+  .final .final-flower {
+    position:absolute; right:32px; top:36px; opacity:.55; pointer-events:none;
+  }
+  .final .final-flower2 {
+    position:absolute; left:42px; bottom:36px; opacity:.5; pointer-events:none;
+  }
+  .final .final-people { margin: 0 auto 18px; display:block; opacity:.95; }
+  .final h3 { font-size:31px; font-family:var(--w-serif); margin:0 0 12px; position:relative; z-index:1; letter-spacing:.5px; text-shadow: 0 1px 3px rgba(0,0,0,.10); }
+  .final .ctas, .final p { position:relative; z-index:1; }
+  .final p { font-size:13.5px; opacity:.94; margin:0 0 26px; line-height:1.9; }
+  .final .ctas { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+  .final .btn { border-color:#fff; background:#fff; color:var(--w-ink); }
+  .final .btn.ghost { background:transparent; color:#fff; }
+
+  /* FOOTER */
+  footer { background: #2f4a3a; color: #cfe0d3; padding: 40px 72px 28px; }
+  footer .grid { display:grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap:32px; }
+  footer h6 { font-size:11px; letter-spacing:2px; margin:0 0 12px; color:#f4faf3; }
+  footer ul { list-style:none; padding:0; margin:0; font-size:11px; line-height:1.9; }
+  footer .brand { font-size:13px; font-weight:700; color:#f4faf3; }
+  footer .copy { margin-top:28px; padding-top:16px; border-top:1px solid #4a6b56; font-size:10px; opacity:.6; display:flex; justify-content:space-between; }
+
+  /* Tweaks panel */
+  .tweaks {
+    position: fixed; right: 20px; bottom: 20px; width: 300px; max-height: 80vh; overflow: auto;
+    background:#fff; border:1.5px solid #2e2a25; border-radius:12px; padding:16px 18px;
+    z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.18); font-size:12px; display:none;
+  }
+  .tweaks.open { display:block; }
+  .tweaks h3 { margin:0 0 4px; font-size:13px; }
+  .tweaks .hint { font-size:10px; color:#7a736b; margin-bottom:14px; }
+  .tweaks .group { margin-bottom:14px; }
+  .tweaks .label { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:#7a736b; margin-bottom:6px; }
+  .tweaks .row { display:flex; gap:6px; flex-wrap:wrap; }
+  .tweaks .chip { padding:6px 10px; font-size:11px; border-radius:999px; border:1.5px solid #c0b8ac; background:#faf6ee; color:#2e2a25; cursor:pointer; }
+  .tweaks .chip.active { background:#2e2a25; color:#faf6ee; border-color:#2e2a25; }
+  .tweaks .close { position:absolute; top:8px; right:10px; border:none; background:none; font-size:18px; cursor:pointer; color:#7a736b; }
+  .tweaks textarea { width:100%; min-height:60px; font:inherit; font-size:11px; border:1.5px solid #c0b8ac; border-radius:6px; padding:6px 8px; box-sizing:border-box; background:#faf6ee; resize:vertical; }
+
+  /* helpers */
+  .anno { position: relative; }
+  .anno::after {
+    content: attr(data-anno); position: absolute; right: -18px; top: -10px;
+    background:#fef4a8; color:#5a4a2a; font-size:9px; padding:2px 6px; border-radius:3px;
+    font-family:"Comic Sans MS", cursive; transform: rotate(2deg);
+    border:1px solid #d8c864; white-space:nowrap; z-index: 2;
+  }
+
+  @media print {
+    body { background:#fff; }
+    .tweaks, .meta { display:none; }
+    .page { box-shadow:none; }
+  }
+  html { scroll-behavior: smooth; }
+  .nav a { color: inherit; text-decoration: none; transition: color .15s ease; }
+  .nav ul li a:hover { color: var(--w-accent); }
+  [id] { scroll-margin-top: 72px; }
+
+  /* Flower cursor */
+  body, a, button, .chip, .btn, input, textarea, .feature-card, .pin, .tl-step, .trial-card, .fee-wrap, .mission-card {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><g transform='translate(14 14)'><g><ellipse cx='0' cy='-8' rx='4.5' ry='7' fill='%23f4b5c7' transform='rotate(0)'/><ellipse cx='0' cy='-8' rx='4.5' ry='7' fill='%23e89bb0' transform='rotate(72)'/><ellipse cx='0' cy='-8' rx='4.5' ry='7' fill='%23f4b5c7' transform='rotate(144)'/><ellipse cx='0' cy='-8' rx='4.5' ry='7' fill='%23e89bb0' transform='rotate(216)'/><ellipse cx='0' cy='-8' rx='4.5' ry='7' fill='%23f4b5c7' transform='rotate(288)'/></g><circle r='3' fill='%23f4c95d'/></g></svg>") 14 14, auto;
+  }
+  a, button, .chip, .btn, .pin { cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><g transform='translate(16 16)'><g><ellipse cx='0' cy='-10' rx='5' ry='8' fill='%23f4b5c7' transform='rotate(0)'/><ellipse cx='0' cy='-10' rx='5' ry='8' fill='%23e89bb0' transform='rotate(72)'/><ellipse cx='0' cy='-10' rx='5' ry='8' fill='%23f4b5c7' transform='rotate(144)'/><ellipse cx='0' cy='-10' rx='5' ry='8' fill='%23e89bb0' transform='rotate(216)'/><ellipse cx='0' cy='-10' rx='5' ry='8' fill='%23f4b5c7' transform='rotate(288)'/></g><circle r='3.5' fill='%23f4c95d'/></g></svg>") 16 16, pointer; }
+
+  /* Bloom click effect */
+  .bloom {
+    position: fixed; pointer-events: none; z-index: 10000;
+    width: 80px; height: 80px; transform: translate(-50%, -50%);
+    animation: bloom-pop 700ms cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  .bloom svg { width: 100%; height: 100%; filter: drop-shadow(0 4px 10px rgba(232,155,176,.45)); }
+  @keyframes bloom-pop {
+    0%   { transform: translate(-50%,-50%) scale(0) rotate(-30deg); opacity: 0; }
+    30%  { transform: translate(-50%,-50%) scale(1.15) rotate(10deg); opacity: 1; }
+    60%  { transform: translate(-50%,-50%) scale(1) rotate(0deg); opacity: 1; }
+    100% { transform: translate(-50%,-50%) scale(1.4) rotate(20deg); opacity: 0; }
+  }
+  .petal-burst {
+    position: fixed; pointer-events: none; z-index: 10000;
+    width: 1px; height: 1px; transform: translate(-50%, -50%);
+  }
+  .petal-burst .petal {
+    position: absolute; left: 0; top: 0; width: 10px; height: 14px;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    transform-origin: center center;
+    animation: petal-fly 800ms cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  @keyframes petal-fly {
+    0%   { transform: translate(-50%,-50%) scale(.4) rotate(0deg); opacity: 1; }
+    100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1) rotate(var(--rot)); opacity: 0; }
+  }
+  /* ===== TRUST BLOCKS (added: evidence-based trust layer) ===== */
+
+  /* ---- Shared watercolor ground for HTML trust sections ---- */
+  .factbar, .voices, .qa, .care-trust {
+    background:
+      radial-gradient(120% 80% at 6% 0%, rgba(244,201,93,.12), transparent 42%),
+      radial-gradient(120% 80% at 96% 100%, rgba(79,179,201,.10), transparent 44%),
+      #f6f0e1;
+  }
+
+  /* Fact bar — numbers right under hero */
+  .factbar {
+    padding: 48px 56px 50px;
+    position: relative;
+  }
+  .factbar-inner {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    max-width: 880px; margin: 0 auto;
+  }
+  .fact {
+    text-align: center; padding: 4px 14px; position: relative;
+  }
+  .fact + .fact::before {
+    content:''; position:absolute; left:0; top:16%; height:68%; width:1px;
+    background: linear-gradient(180deg, transparent, rgba(120,140,110,.45), transparent);
+  }
+  .fact .num {
+    font-family: var(--w-serif); font-weight: 700; color: var(--w-accent);
+    font-size: 38px; line-height: 1; letter-spacing: -0.5px;
+    display:flex; align-items:baseline; justify-content:center; gap:3px;
+  }
+  .fact .num .unit { font-size: 15px; font-weight: 700; color: var(--w-ink-soft); }
+  .fact .num .pre { font-size: 15px; font-weight: 700; color: var(--w-ink-soft); }
+  .fact .label { font-size: 11.5px; color: var(--w-ink-soft); margin-top: 9px; line-height: 1.5; }
+
+  /* Voices — testimonials */
+  .voices { padding: calc(62px * var(--pad-y,1)) 56px; position: relative; }
+  .voices-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 34px; }
+  .voice-card {
+    background:#fffdf7; border-radius: 24px; padding: 28px 26px 22px; position:relative;
+    box-shadow: 0 18px 36px -22px rgba(120,95,55,0.40), 0 2px 8px rgba(120,95,55,0.05);
+    border: 1px solid rgba(120,95,55,0.10);
+  }
+  .voice-card:nth-child(2) { transform: translateY(-10px); }
+  .voice-card .quote-mark {
+    font-family: var(--w-serif); font-size: 56px; line-height: 0.4; color: #e6a96f;
+    opacity: .55; display:block; height: 26px;
+  }
+  .voice-card p { font-size: 13.5px; line-height: 2.0; color: var(--w-ink); margin: 8px 0 18px; }
+  .voice-card .who { display:flex; align-items:center; gap:11px; border-top:1px solid rgba(120,95,55,0.12); padding-top:15px; }
+  .voice-card .who .av {
+    width: 38px; height: 38px; border-radius: 50%; flex:none;
+    background: radial-gradient(circle at 35% 30%, #fff, #fbeede);
+    border: 1px solid rgba(120,95,55,0.12);
+    display:flex; align-items:center; justify-content:center; font-size: 16px;
+  }
+  .voice-card .who .meta b { font-size: 12px; font-weight: 700; color: var(--w-ink); display:block; font-family: var(--w-serif); }
+  .voice-card .who .meta span { font-size: 10.5px; color: var(--w-ink-soft); }
+
+  /* Q&A — soft watercolor cards, rounded-serif Q/A marks */
+  .qa { padding: calc(62px * var(--pad-y,1)) 56px; position: relative; }
+  .qa-deco { position:absolute; pointer-events:none; opacity:.55; }
+  .qa-deco.l { left: 40px; top: 30px; }
+  .qa-deco.r { right: 40px; bottom: 26px; }
+  .qa-list { max-width: 780px; margin: 30px auto 0; display:flex; flex-direction:column; gap: 16px; position:relative; z-index:1; }
+  .qa-item {
+    background:#fffdf7; border-radius: 22px; padding: 22px 26px;
+    box-shadow: 0 16px 32px -22px rgba(120,95,55,0.38), 0 2px 6px rgba(120,95,55,0.04);
+    border: 1px solid rgba(120,95,55,0.10);
+  }
+  .qa-item .q { display:flex; gap:14px; align-items:center; font-family: var(--w-serif); font-weight:700; font-size:15.5px; color:var(--w-ink); }
+  .qa-item .q .badge, .qa-item .a .badge {
+    flex:none; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:14px; font-weight:700; font-family: var(--w-serif);
+  }
+  .qa-item .q .badge { background: radial-gradient(circle at 35% 30%, #fbe4c6, #f4cfa1); color:#b97636; }
+  .qa-item .a { display:flex; gap:14px; align-items:flex-start; margin-top: 14px; padding-top: 14px; border-top: 1px dashed rgba(120,95,55,0.16); }
+  .qa-item .a .badge { background: radial-gradient(circle at 35% 30%, #d8eef0, #b8dfe2); color:#3f8a9c; margin-top:1px; }
+  .qa-item .a p { margin:0; font-size:13px; line-height:1.95; color:var(--w-ink-soft); padding-top:4px; }
+
+  /* Care manager trust block */
+  .care-trust { padding: calc(62px * var(--pad-y,1)) 56px; }
+  .care-trust .care-head { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap; margin-bottom:26px; }
+  .care-trust .care-head .lead { max-width: 560px; }
+  .vacancy {
+    flex:none; background:#fffdf7; border:1px solid rgba(120,95,55,0.12); border-radius:18px; padding:16px 22px;
+    box-shadow: 0 14px 28px -18px rgba(120,95,55,0.35); text-align:center;
+  }
+  .vacancy .dot { display:inline-block; width:8px; height:8px; border-radius:50%; background:#7cb342; margin-right:7px; box-shadow:0 0 0 4px rgba(124,179,66,.18); vertical-align:middle; }
+  .vacancy .status { font-size:13px; font-weight:700; color:var(--w-ink); font-family: var(--w-serif); }
+  .vacancy .sub { font-size:10.5px; color:var(--w-ink-soft); margin-top:5px; }
+  .care-flow { display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; }
+  .care-step {
+    background:#fffdf7;
+    border-radius:20px; padding:22px 20px; position:relative; border:1px solid rgba(120,95,55,0.10);
+    box-shadow: 0 14px 28px -20px rgba(120,95,55,0.34);
+  }
+  .care-step .st-no { font-size:11px; font-weight:700; letter-spacing:1px; color:#6fa0ad; font-family: var(--w-serif); }
+  .care-step h5 { font-size:14px; font-weight:700; margin:6px 0 8px; color:var(--w-ink); font-family:var(--w-serif); }
+  .care-step p { font-size:12px; line-height:1.8; color:var(--w-ink-soft); margin:0; }
+  .care-step:not(:last-child)::after {
+    content:''; position:absolute; right:-13px; top:50%; transform:translateY(-50%);
+    width:14px; height:14px; z-index:2;
+    background: no-repeat center/contain url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237cb342' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12h13M13 6l6 6-6 6'/></svg>");
+  }
+  .care-points { display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; justify-content:center; }
+  .care-points .chip {
+    background:#fffdf7; border:1px solid rgba(120,95,55,0.14); border-radius:999px; padding:9px 17px;
+    font-size:12px; color:var(--w-ink); font-weight:600;
+    display:inline-flex; align-items:center; gap:7px;
+    box-shadow: 0 4px 12px -8px rgba(120,95,55,0.3);
+  }
+  .care-points .chip::before { content:'✿'; color:#e6a96f; font-weight:700; }
+
+  /* Trust badges strip */
+  .trust-badges {
+    background:
+      radial-gradient(120% 100% at 50% 0%, rgba(124,179,66,.08), transparent 60%),
+      linear-gradient(180deg, #f6f0e1 0%, #f1e9d6 34%, #f1e9d6 100%);
+    padding: 34px 56px 30px;
+    display:flex; align-items:center; justify-content:center; gap:44px; flex-wrap:wrap;
+  }
+  .trust-badge { display:flex; align-items:center; gap:11px; font-size:11.5px; color:var(--w-ink-soft); }
+  .trust-badge b { display:block; font-size:13px; color:var(--w-ink); font-weight:700; font-family: var(--w-serif); }
+  .trust-badge .tb-ic {
+    width:40px; height:40px; border-radius:50%; flex:none;
+    background: radial-gradient(circle at 35% 30%, #fff, #f3ead6); border:1px solid rgba(120,95,55,0.16);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--w-accent); font-weight:700; font-size:15px; font-family: var(--w-serif);
+  }
+
+  /* Shared eyebrow/title for trust sections */
+  .trust-title { text-align:center; }
+  .trust-title .eyebrow { font-size:11px; letter-spacing:3px; color:#c98a4f; text-transform:uppercase; margin-bottom:10px; }
+  .trust-title h3 { font-size:29px; font-weight:700; margin:0; font-family:var(--w-serif); color:var(--w-ink); letter-spacing:.5px; }
+  .trust-title p { font-size:13.5px; color:var(--w-ink-soft); margin:12px auto 0; max-width:580px; line-height:1.85; }
+
+  /* ===== RESPONSIVE ===== */
+  img { max-width: 100%; }
+  @media (max-width: 1080px) {
+    .canvas { padding: 0; }
+    .page { width: 100%; border-radius: 0; box-shadow: none; }
+  }
+  @media (max-width: 760px) {
+    /* nav */
+    .nav { flex-wrap: wrap; gap: 8px 12px; padding: 10px 16px; }
+    .nav ul { display: none; }
+    .nav .cta span { display: none; }
+    .nav .logo .name small { display: none; }
+    /* hero */
+    .hero-bg { min-height: 0; padding: 44px 22px 96px; background-position: 66% center; }
+    .hero-bg::before { background: linear-gradient(180deg, rgba(255,250,240,.80) 0%, rgba(255,250,240,.48) 58%, rgba(255,250,240,.18) 100%); }
+    .hero-bg .hero-text { max-width: 100%; }
+    .hero-bg .hero-text .hero-logo { width: 104px; margin-left: -6px; }
+    .hero h2 { font-size: 29px; line-height: 1.5; }
+    .hero-bg .hero-text .subcopy br { display: none; }
+    .hero-bg .hero-text .subcopy { font-size: 12.5px; }
+    .hero .ctas { flex-wrap: wrap; gap: 10px; }
+    /* factbar */
+    .factbar { padding: 36px 24px; }
+    .factbar-inner { grid-template-columns: repeat(2, 1fr); gap: 22px 8px; }
+    .fact + .fact::before { display: none; }
+    .fact .num { font-size: 30px; }
+    /* titles */
+    .section-title h3, .trust-title h3 { font-size: 22.5px; }
+    .section-title p, .trust-title p { font-size: 12.5px; }
+    /* voices */
+    .voices { padding: 44px 20px; }
+    .voices-grid { grid-template-columns: 1fr; gap: 14px; margin-top: 24px; }
+    .voice-card:nth-child(2) { transform: none; }
+    /* qa */
+    .qa { padding: 44px 20px; }
+    .qa-deco { display: none; }
+    .qa-item { padding: 18px 18px; }
+    .qa-item .q { font-size: 14px; gap: 10px; }
+    /* care-trust */
+    .care-trust { padding: 44px 20px; }
+    .care-head { flex-direction: column; align-items: stretch; }
+    .care-trust .care-head .lead { max-width: none; }
+    .vacancy { width: 100%; box-sizing: border-box; }
+    .care-flow { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .care-step:not(:last-child)::after { display: none; }
+    /* access */
+    .access { padding: 8px 20px 44px; }
+    .access-wrap { grid-template-columns: 1fr; gap: 16px; }
+    .map-box { height: 250px; }
+    .map-box .pin .label { font-size: 9.5px; }
+    /* trust badges */
+    .trust-badges { padding: 26px 20px; gap: 14px 22px; justify-content: flex-start; }
+    .trust-badge { flex: 1 1 44%; }
+    /* final */
+    .final { padding: 56px 22px 52px; }
+    .final h3 { font-size: 23px; }
+    .final .ctas { flex-direction: column; align-items: center; }
+    .final .ctas .btn { width: 100%; max-width: 320px; justify-content: center; box-sizing: border-box; }
+    .final .final-flower, .final .final-flower2 { display: none; }
+    /* footer */
+    footer { padding: 32px 22px 22px; }
+    footer .grid { grid-template-columns: 1fr 1fr; gap: 22px; }
+    footer .grid > div:first-child { grid-column: 1 / -1; }
+    footer .copy { flex-direction: column; gap: 6px; }
+    /* misc */
+    [id] { scroll-margin-top: 60px; }
+    .tweaks { width: min(300px, calc(100vw - 32px)); }
+    /* seams scale down with the images */
+    .features:has(> .features-img),
+    .day:has(> .day-flow-img),
+    .fee:has(> .fee-img),
+    .letter,
+    .careplan,
+    .trial:has(.visit-flow) { margin-top: -14px; }
+    .factbar + .letter { margin-top: 0; }
+    .features:has(> .features-img) > .features-img,
+    .day:has(> .day-flow-img) > .day-flow-img,
+    .fee:has(> .fee-img) > .fee-img,
+    .letter > .letter-img,
+    .careplan > .careplan-img {
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0, rgba(0,0,0,.5) 12px, #000 28px, #000 calc(100% - 18px), rgba(0,0,0,.5) calc(100% - 8px), transparent 100%);
+              mask-image: linear-gradient(to bottom, transparent 0, rgba(0,0,0,.5) 12px, #000 28px, #000 calc(100% - 18px), rgba(0,0,0,.5) calc(100% - 8px), transparent 100%);
+    }
+    .trial:has(.visit-flow) .visit-flow-bg {
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0, rgba(0,0,0,.5) 12px, #000 28px, #000 calc(100% - 8px), transparent 100%);
+              mask-image: linear-gradient(to bottom, transparent 0, rgba(0,0,0,.5) 12px, #000 28px, #000 calc(100% - 8px), transparent 100%);
+    }
+    .hero-bg::after { height: 64px; }
+  }
+</style>
+</head>
+<body data-mood="park" data-stroke="clean" data-density="loose">
+
+<div class="canvas">
+
+  <div class="page" data-screen-label="Top">
+
+    <!-- Reusable SVG symbols -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <defs>
+        <!-- BIG FLOWER: petals with shading, center, leaf -->
+        <symbol id="flower-pink" viewBox="0 0 120 120">
+          <g transform="translate(60 60)">
+            <g>
+              <ellipse cx="0" cy="-32" rx="18" ry="28" fill="#f4b5c7" transform="rotate(0)"/>
+              <ellipse cx="0" cy="-32" rx="18" ry="28" fill="#e89bb0" transform="rotate(72)"/>
+              <ellipse cx="0" cy="-32" rx="18" ry="28" fill="#f4b5c7" transform="rotate(144)"/>
+              <ellipse cx="0" cy="-32" rx="18" ry="28" fill="#e89bb0" transform="rotate(216)"/>
+              <ellipse cx="0" cy="-32" rx="18" ry="28" fill="#f4b5c7" transform="rotate(288)"/>
+            </g>
+            <!-- petal highlights -->
+            <g opacity=".45">
+              <ellipse cx="-5" cy="-42" rx="4" ry="10" fill="#fff" transform="rotate(0)"/>
+              <ellipse cx="-5" cy="-42" rx="4" ry="10" fill="#fff" transform="rotate(72)"/>
+              <ellipse cx="-5" cy="-42" rx="4" ry="10" fill="#fff" transform="rotate(144)"/>
+              <ellipse cx="-5" cy="-42" rx="4" ry="10" fill="#fff" transform="rotate(216)"/>
+              <ellipse cx="-5" cy="-42" rx="4" ry="10" fill="#fff" transform="rotate(288)"/>
+            </g>
+            <circle r="12" fill="#f4c95d"/>
+            <circle r="12" fill="none" stroke="#d9a62e" stroke-width="1" opacity=".5"/>
+            <circle cx="-3" cy="-3" r="4" fill="#fff4c7" opacity=".8"/>
+          </g>
+        </symbol>
+        <symbol id="flower-yellow" viewBox="0 0 120 120">
+          <g transform="translate(60 60)">
+            <g>
+              <ellipse cx="0" cy="-30" rx="14" ry="24" fill="#f4c95d" transform="rotate(0)"/>
+              <ellipse cx="0" cy="-30" rx="14" ry="24" fill="#f0b940" transform="rotate(45)"/>
+              <ellipse cx="0" cy="-30" rx="14" ry="24" fill="#f4c95d" transform="rotate(90)"/>
+              <ellipse cx="0" cy="-30" rx="14" ry="24" fill="#f0b940" transform="rotate(135)"/>
+              <ellipse cx="0" cy="-30" rx="14" ry="24" fill="#f4c95d" transform="rotate(180)"/>
+              <ellipse cx="0" cy="-30" rx="14" ry="24" fill="#f0b940" transform="rotate(225)"/>
+              <ellipse cx="0" cy="-30" rx="14" ry="24" fill="#f4c95d" transform="rotate(270)"/>
+              <ellipse cx="0" cy="-30" rx="14" ry="24" fill="#f0b940" transform="rotate(315)"/>
+            </g>
+            <circle r="11" fill="#7a4e1e"/>
+            <circle cx="-2" cy="-2" r="3.5" fill="#c07a2e" opacity=".7"/>
+          </g>
+        </symbol>
+        <symbol id="flower-blue" viewBox="0 0 120 120">
+          <g transform="translate(60 60)">
+            <g>
+              <path d="M0 -40 C -14 -40 -20 -26 -12 -16 C -4 -10 4 -10 12 -16 C 20 -26 14 -40 0 -40 Z" fill="#9ad4e3" transform="rotate(0)"/>
+              <path d="M0 -40 C -14 -40 -20 -26 -12 -16 C -4 -10 4 -10 12 -16 C 20 -26 14 -40 0 -40 Z" fill="#7ec3d4" transform="rotate(72)"/>
+              <path d="M0 -40 C -14 -40 -20 -26 -12 -16 C -4 -10 4 -10 12 -16 C 20 -26 14 -40 0 -40 Z" fill="#9ad4e3" transform="rotate(144)"/>
+              <path d="M0 -40 C -14 -40 -20 -26 -12 -16 C -4 -10 4 -10 12 -16 C 20 -26 14 -40 0 -40 Z" fill="#7ec3d4" transform="rotate(216)"/>
+              <path d="M0 -40 C -14 -40 -20 -26 -12 -16 C -4 -10 4 -10 12 -16 C 20 -26 14 -40 0 -40 Z" fill="#9ad4e3" transform="rotate(288)"/>
+            </g>
+            <circle r="10" fill="#f4c95d"/>
+          </g>
+        </symbol>
+        <symbol id="leaf-sprig" viewBox="0 0 100 120">
+          <path d="M50 120 Q48 80 40 50 Q34 26 46 4" stroke="#6b8877" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M42 44 Q22 38 18 22 Q32 28 44 38" fill="#8cc152"/>
+          <path d="M42 44 Q22 38 18 22" stroke="#5a7d2a" stroke-width="1" fill="none" opacity=".5"/>
+          <path d="M45 70 Q70 64 78 48 Q60 58 46 62" fill="#a7d66b"/>
+          <path d="M45 70 Q70 64 78 48" stroke="#5a7d2a" stroke-width="1" fill="none" opacity=".5"/>
+          <path d="M44 92 Q26 90 18 76 Q34 84 46 84" fill="#7cb342"/>
+        </symbol>
+        <!-- PERSON: rounded, warm figure. Parameters set via nested currentColor via fills. -->
+        <symbol id="person" viewBox="0 0 60 100">
+          <!-- shadow -->
+          <ellipse cx="30" cy="96" rx="16" ry="3" fill="rgba(47,74,58,0.15)"/>
+          <!-- legs -->
+          <path d="M22 72 L20 94 M38 72 L40 94" stroke="#3a4a5c" stroke-width="6" stroke-linecap="round"/>
+          <!-- body (pill shape) -->
+          <path d="M14 52 Q14 38 30 38 Q46 38 46 52 L46 72 Q46 76 42 76 L18 76 Q14 76 14 72 Z" class="person-shirt" fill="#4fb3c9"/>
+          <!-- body highlight -->
+          <path d="M18 44 Q22 40 26 41" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".4" fill="none"/>
+          <!-- arms -->
+          <circle cx="12" cy="58" r="5" class="person-shirt" fill="#4fb3c9"/>
+          <circle cx="48" cy="58" r="5" class="person-shirt" fill="#4fb3c9"/>
+          <!-- hands -->
+          <circle cx="10" cy="64" r="3.5" fill="#ffd7a8"/>
+          <circle cx="50" cy="64" r="3.5" fill="#ffd7a8"/>
+          <!-- neck -->
+          <rect x="27" y="32" width="6" height="8" fill="#ffd7a8"/>
+          <!-- head -->
+          <circle cx="30" cy="22" r="12" fill="#ffd7a8"/>
+          <!-- hair -->
+          <path d="M20 18 Q20 9 30 9 Q40 9 40 18 Q40 15 30 14 Q24 14 20 18" class="person-hair" fill="#3a2a1e"/>
+          <!-- face highlight -->
+          <circle cx="26" cy="20" r="2" fill="#fff" opacity=".3"/>
+          <!-- eyes & smile -->
+          <circle cx="26" cy="23" r="1.2" fill="#2f4a3a"/>
+          <circle cx="34" cy="23" r="1.2" fill="#2f4a3a"/>
+          <path d="M27 28 Q30 30 33 28" stroke="#2f4a3a" stroke-width="1" fill="none" stroke-linecap="round"/>
+          <!-- blush -->
+          <circle cx="24" cy="26" r="1.5" fill="#e89bb0" opacity=".5"/>
+          <circle cx="36" cy="26" r="1.5" fill="#e89bb0" opacity=".5"/>
+        </symbol>
+        <!-- PERSON SEATED (wheelchair) -->
+        <symbol id="person-chair" viewBox="0 0 60 100">
+          <ellipse cx="30" cy="96" rx="18" ry="3" fill="rgba(47,74,58,0.18)"/>
+          <!-- chair wheel -->
+          <circle cx="30" cy="78" r="16" fill="none" stroke="#3a4a5c" stroke-width="2.5"/>
+          <circle cx="30" cy="78" r="4" fill="#3a4a5c"/>
+          <!-- seat base -->
+          <rect x="14" y="64" width="32" height="4" rx="2" fill="#3a4a5c"/>
+          <!-- body -->
+          <path d="M16 42 Q16 30 30 30 Q44 30 44 42 L44 64 L16 64 Z" class="person-shirt" fill="#e89bb0"/>
+          <!-- arm rest -->
+          <circle cx="14" cy="50" r="5" class="person-shirt" fill="#e89bb0"/>
+          <circle cx="46" cy="50" r="5" class="person-shirt" fill="#e89bb0"/>
+          <circle cx="12" cy="56" r="3.5" fill="#ffd7a8"/>
+          <circle cx="48" cy="56" r="3.5" fill="#ffd7a8"/>
+          <rect x="27" y="24" width="6" height="8" fill="#ffd7a8"/>
+          <circle cx="30" cy="16" r="11" fill="#ffd7a8"/>
+          <path d="M21 13 Q21 5 30 5 Q39 5 39 13 Q39 10 30 9 Q25 9 21 13" fill="#5a4a2a"/>
+          <circle cx="26" cy="18" r="1.1" fill="#2f4a3a"/>
+          <circle cx="34" cy="18" r="1.1" fill="#2f4a3a"/>
+          <path d="M27 22 Q30 24 33 22" stroke="#2f4a3a" stroke-width="1" fill="none" stroke-linecap="round"/>
+          <circle cx="24" cy="20" r="1.3" fill="#e89bb0" opacity=".5"/>
+          <circle cx="36" cy="20" r="1.3" fill="#e89bb0" opacity=".5"/>
+        </symbol>
+      </defs>
+    </svg>
+
+    <!-- NAV -->
+    <nav class="nav">
+      <div class="logo">
+        <img class="mark-img" src="assets/logo-mark.png" alt="withハピネス"/>
+        <div class="name">withハピネス<small>グループホーム／鳥取市立川</small></div>
+      </div>
+      <ul>
+        <li><a href="#mission">想い</a></li><li><a href="#features">4つの特徴</a></li><li><a href="#voices">声</a></li><li><a href="#fee">料金</a></li><li><a href="#qa">Q&amp;A</a></li><li><a href="#visit">見学</a></li><li><a href="#careplan">支援者の方へ</a></li><li><a href="#access">アクセス</a></li>
+      </ul>
+      <div class="cta">
+        <span style="font-size:11px; color:var(--w-ink-soft);">☎ 0857-30-4162</span>
+        <a href="#visit" class="btn">見学申込 →</a>
+      </div>
+    </nav>
+
+    <!-- HERO (水彩背景) -->
+    <section class="hero" data-screen-label="01 Hero">
+      <div class="hero-bg">
+        <div class="hero-text">
+          <img class="hero-logo" src="assets/logo.png" alt="withハピネス グループホーム"/>
+          <div class="eyebrow">― 鳥取・立川のグループホーム ―</div>
+          <h2 id="heroCopy" style="white-space:pre-line;">ここなら、<em class="accent-char">大丈夫</em>。
+そう思える、<em class="accent-char warm">みんなのおうち</em>。</h2>
+          <p class="subcopy">
+            精神障害・知的障害をお持ちの方のためのグループホーム。<br/>
+            男性5名・少人数制・365日夜間スタッフ常駐。<br/>
+            嬉しいことはみんなで喜んで、辛いことはみんなでわけっこできる、温かいみんなのおうちです。
+          </p>
+          <div class="ctas">
+            <button class="btn accent lg">見学を申し込む →</button>
+            <button class="btn soft lg">☎ 0857-30-4162</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FACT BAR — numbers that build trust -->
+    <section class="factbar" data-screen-label="01.5 Facts">
+      <div class="factbar-inner">
+        <div class="fact">
+          <div class="num">365<span class="unit">日</span></div>
+          <div class="label">夜間スタッフ常駐</div>
+        </div>
+        <div class="fact">
+          <div class="num">5<span class="unit">名</span></div>
+          <div class="label">少人数・男性定員</div>
+        </div>
+        <div class="fact">
+          <div class="num">0<span class="unit">円</span></div>
+          <div class="label">通院・買い物の付き添い</div>
+        </div>
+        <div class="fact">
+          <div class="num"><span class="pre">車で</span>10<span class="unit">分</span></div>
+          <div class="label">鳥取駅より</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MISSION / 想い（ご利用者さま・ご家族へ） -->
+    <section class="letter" id="mission" data-screen-label="02 Mission">
+      <img class="letter-img" src="assets/letter.png" alt="ご利用者さま・ご家族の皆さまへ。安心して毎日を過ごしていただけるように。"/>
+    </section>
+
+    <!-- FEATURES A -->
+    <!-- FEATURES A -->
+    <section class="features" id="features" data-screen-label="03 Features">
+      <img class="features-img" src="assets/features.png" alt="WITHハピネス立川が、大切にしている4つのこと"/>
+    </section>
+    <section class="features features-old" hidden style="display:none">
+      <div class="feature-card">
+        <div class="real-photo img" style="height:118px;"><img src="assets/manager-smile.png" alt="笑顔の管理者"/></div>
+        <div>
+          <div class="num">01</div>
+          <h4>多彩なスタッフとチームワーク</h4>
+          <p>建築・料理・製造業など、多職種バックグラウンドのスタッフがチームで向き合います。風通しの良い職場環境で、スタッフ自身も「ここなら大丈夫」と感じられる場所に。</p>
+        </div>
+        <div class="more">read more →</div>
+      </div>
+      <div class="feature-card">
+        <div class="real-photo img" style="height:118px;"><img src="assets/dining.png" alt="手作り料理が並ぶダイニング"/></div>
+        <div>
+          <div class="num">02</div>
+          <h4>手作り料理「食べる楽しみ」</h4>
+          <p>元日本料理総料理長監修のメニュー。日々の食卓にほんの少しの特別感を。刺身の盛り合わせが登場することも。朝食300円／夕食500円。</p>
+        </div>
+        <div class="more">read more →</div>
+      </div>
+      <div class="feature-card">
+        <div class="wire-photo img"><span class="tag">居室で読書</span></div>
+        <div>
+          <div class="num">03</div>
+          <h4>干渉しすぎない自立支援</h4>
+          <p>本人の自主性を尊重します。「できることは自分でやる」を大切に、必要なときにはそっと手を差し伸べる。押し付けない、過度に世話を焼かない支援です。</p>
+        </div>
+        <div class="more">read more →</div>
+      </div>
+      <div class="feature-card">
+        <div class="real-photo img" style="height:118px;"><img src="assets/entrance.png" alt="玄関まわり・おでかけ前"/></div>
+        <div>
+          <div class="num">04</div>
+          <h4>日常生活の付き添いサポート</h4>
+          <p>通院・買い物の付き添いは無償で対応。365日夜間スタッフ常駐。地域交流会への参加を通じて、地域との信頼関係も大切にしています。</p>
+        </div>
+        <div class="more">read more →</div>
+      </div>
+    </section>
+
+    <!-- 1日の流れ -->
+    <section class="day" id="day" data-screen-label="04 Day">
+      <img class="day-flow-img" src="assets/day-flow.png" alt="WITHハピネス立川の1日の過ごし方"/>
+    </section>
+    <section class="day day-old" hidden style="display:none">
+      <svg class="day-deco-leaf-l" width="60" height="22" viewBox="0 0 60 22" fill="none">
+        <path d="M2 12 Q 18 4, 30 12 T 58 12" stroke="#9bb98a" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        <ellipse cx="14" cy="9" rx="4" ry="2" fill="#b6cf9a" transform="rotate(-20 14 9)"/>
+        <ellipse cx="26" cy="13" rx="4" ry="2" fill="#b6cf9a" transform="rotate(15 26 13)"/>
+        <ellipse cx="40" cy="9" rx="4" ry="2" fill="#b6cf9a" transform="rotate(-15 40 9)"/>
+        <ellipse cx="52" cy="13" rx="4" ry="2" fill="#b6cf9a" transform="rotate(20 52 13)"/>
+      </svg>
+      <svg class="day-deco-leaf-r" width="60" height="22" viewBox="0 0 60 22" fill="none">
+        <path d="M2 12 Q 18 4, 30 12 T 58 12" stroke="#9bb98a" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        <ellipse cx="14" cy="9" rx="4" ry="2" fill="#b6cf9a" transform="rotate(-20 14 9)"/>
+        <ellipse cx="26" cy="13" rx="4" ry="2" fill="#b6cf9a" transform="rotate(15 26 13)"/>
+        <ellipse cx="40" cy="9" rx="4" ry="2" fill="#b6cf9a" transform="rotate(-15 40 9)"/>
+        <ellipse cx="52" cy="13" rx="4" ry="2" fill="#b6cf9a" transform="rotate(20 52 13)"/>
+      </svg>
+      <div class="day-grid">
+
+        <!-- 1 朝食 -->
+        <div class="day-card s1">
+          <div class="day-blob"><span class="num">1</span></div>
+          <div class="day-icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <circle cx="14" cy="14" r="5" fill="#f4b840"/>
+              <g stroke="#f4b840" stroke-width="1.8" stroke-linecap="round">
+                <line x1="14" y1="2" x2="14" y2="5"/>
+                <line x1="14" y1="23" x2="14" y2="26"/>
+                <line x1="2" y1="14" x2="5" y2="14"/>
+                <line x1="23" y1="14" x2="26" y2="14"/>
+                <line x1="5.5" y1="5.5" x2="7.6" y2="7.6"/>
+                <line x1="20.4" y1="20.4" x2="22.5" y2="22.5"/>
+                <line x1="22.5" y1="5.5" x2="20.4" y2="7.6"/>
+                <line x1="7.6" y1="20.4" x2="5.5" y2="22.5"/>
+              </g>
+            </svg>
+          </div>
+          <div class="day-photo"><img src="assets/img-a.png" alt="朝食"/></div>
+          <p class="caption">スタッフ手作りの朝食で<br/>1日をスタート。</p>
+          <svg class="leaves" width="60" height="18" viewBox="0 0 60 18" fill="none">
+            <path d="M4 12 Q 18 4, 30 12 T 56 12" stroke="#d9b86a" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+            <ellipse cx="14" cy="9" rx="3.5" ry="1.8" fill="#e6c97b" transform="rotate(-20 14 9)"/>
+            <ellipse cx="26" cy="13" rx="3.5" ry="1.8" fill="#e6c97b" transform="rotate(15 26 13)"/>
+            <ellipse cx="40" cy="9" rx="3.5" ry="1.8" fill="#e6c97b" transform="rotate(-15 40 9)"/>
+            <ellipse cx="50" cy="13" rx="3.5" ry="1.8" fill="#e6c97b" transform="rotate(20 50 13)"/>
+          </svg>
+        </div>
+
+        <!-- 2 外出 -->
+        <div class="day-card s2">
+          <div class="day-blob"><span class="num">2</span></div>
+          <div class="day-icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <rect x="5" y="9" width="18" height="13" rx="1.5" fill="#7aa653"/>
+              <path d="M11 9 V 7 a 1 1 0 0 1 1 -1 h 4 a 1 1 0 0 1 1 1 V 9" stroke="#7aa653" stroke-width="1.6" fill="none"/>
+              <line x1="5" y1="14" x2="23" y2="14" stroke="#5d8a3c" stroke-width="1"/>
+              <rect x="12.5" y="13" width="3" height="3" rx="0.4" fill="#5d8a3c"/>
+            </svg>
+          </div>
+          <div class="day-photo"><img src="assets/img-b.png" alt="外出"/></div>
+          <p class="caption">それぞれの就労場所や<br/>活動先へ出発。<br/>自宅で過ごす方もいます。</p>
+          <svg class="leaves" width="60" height="18" viewBox="0 0 60 18" fill="none">
+            <path d="M4 12 Q 18 4, 30 12 T 56 12" stroke="#9bb98a" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+            <ellipse cx="14" cy="9" rx="3.5" ry="1.8" fill="#b6cf9a" transform="rotate(-20 14 9)"/>
+            <ellipse cx="26" cy="13" rx="3.5" ry="1.8" fill="#b6cf9a" transform="rotate(15 26 13)"/>
+            <ellipse cx="40" cy="9" rx="3.5" ry="1.8" fill="#b6cf9a" transform="rotate(-15 40 9)"/>
+            <ellipse cx="50" cy="13" rx="3.5" ry="1.8" fill="#b6cf9a" transform="rotate(20 50 13)"/>
+          </svg>
+        </div>
+
+        <!-- 3 帰宅 -->
+        <div class="day-card s3">
+          <div class="day-blob"><span class="num">3</span></div>
+          <div class="day-icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <rect x="9" y="4" width="10" height="3" rx="1" fill="#62afc4"/>
+              <path d="M8 7 H 20 L 18 11 H 10 Z" fill="#62afc4"/>
+              <g fill="#62afc4">
+                <ellipse cx="11" cy="16" rx="1.3" ry="2" transform="rotate(-10 11 16)"/>
+                <ellipse cx="14" cy="19" rx="1.3" ry="2" transform="rotate(5 14 19)"/>
+                <ellipse cx="17" cy="16" rx="1.3" ry="2" transform="rotate(10 17 16)"/>
+                <ellipse cx="12.5" cy="23" rx="1.1" ry="1.7" transform="rotate(-5 12.5 23)"/>
+                <ellipse cx="15.5" cy="23" rx="1.1" ry="1.7" transform="rotate(8 15.5 23)"/>
+              </g>
+            </svg>
+          </div>
+          <div class="day-photo"><img src="assets/img-c.png" alt="帰宅"/></div>
+          <p class="caption">帰宅後は自分のペースで<br/>家事や入浴、洗濯を<br/>行います。</p>
+          <svg class="leaves" width="60" height="18" viewBox="0 0 60 18" fill="none">
+            <path d="M4 12 Q 18 4, 30 12 T 56 12" stroke="#7fb2c2" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+            <ellipse cx="14" cy="9" rx="3.5" ry="1.8" fill="#a5cdd8" transform="rotate(-20 14 9)"/>
+            <ellipse cx="26" cy="13" rx="3.5" ry="1.8" fill="#a5cdd8" transform="rotate(15 26 13)"/>
+            <ellipse cx="40" cy="9" rx="3.5" ry="1.8" fill="#a5cdd8" transform="rotate(-15 40 9)"/>
+            <ellipse cx="50" cy="13" rx="3.5" ry="1.8" fill="#a5cdd8" transform="rotate(20 50 13)"/>
+          </svg>
+        </div>
+
+        <!-- 4 団らん -->
+        <div class="day-card s4">
+          <div class="day-blob"><span class="num">4</span></div>
+          <div class="day-icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <rect x="3" y="6" width="22" height="14" rx="1.6" fill="#e89a6a"/>
+              <rect x="5" y="8" width="18" height="10" rx="0.6" fill="#fff4ea"/>
+              <rect x="11" y="20" width="6" height="1.6" rx="0.4" fill="#e89a6a"/>
+              <line x1="9" y1="23" x2="19" y2="23" stroke="#e89a6a" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="day-photo"><img src="assets/img-d.png" alt="団らん"/></div>
+          <p class="caption">団らんの時間。<br/>TVを見ながら<br/>会話が弾むことも！</p>
+          <svg class="leaves" width="60" height="18" viewBox="0 0 60 18" fill="none">
+            <path d="M4 12 Q 18 4, 30 12 T 56 12" stroke="#d99a72" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+            <ellipse cx="14" cy="9" rx="3.5" ry="1.8" fill="#f0b890" transform="rotate(-20 14 9)"/>
+            <ellipse cx="26" cy="13" rx="3.5" ry="1.8" fill="#f0b890" transform="rotate(15 26 13)"/>
+            <ellipse cx="40" cy="9" rx="3.5" ry="1.8" fill="#f0b890" transform="rotate(-15 40 9)"/>
+            <ellipse cx="50" cy="13" rx="3.5" ry="1.8" fill="#f0b890" transform="rotate(20 50 13)"/>
+          </svg>
+        </div>
+
+        <!-- 5 就寝 -->
+        <div class="day-card s5">
+          <div class="day-blob"><span class="num">5</span></div>
+          <div class="day-icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <path d="M22 17 a 9 9 0 1 1 -10.5 -12 a 7 7 0 0 0 10.5 12 Z" fill="#9c87c4"/>
+              <circle cx="6" cy="8" r="0.9" fill="#9c87c4"/>
+              <circle cx="23" cy="6" r="0.7" fill="#9c87c4"/>
+              <circle cx="9" cy="20" r="0.7" fill="#9c87c4"/>
+            </svg>
+          </div>
+          <div class="day-photo"><img src="assets/img-e.png" alt="就寝"/></div>
+          <p class="caption">個室でのリラックスタイム。<br/>夜間もスタッフが常駐し<br/>見守ります。</p>
+          <svg class="leaves" width="60" height="18" viewBox="0 0 60 18" fill="none">
+            <path d="M4 12 Q 18 4, 30 12 T 56 12" stroke="#a597ce" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+            <ellipse cx="14" cy="9" rx="3.5" ry="1.8" fill="#c4b6e0" transform="rotate(-20 14 9)"/>
+            <ellipse cx="26" cy="13" rx="3.5" ry="1.8" fill="#c4b6e0" transform="rotate(15 26 13)"/>
+            <ellipse cx="40" cy="9" rx="3.5" ry="1.8" fill="#c4b6e0" transform="rotate(-15 40 9)"/>
+            <ellipse cx="50" cy="13" rx="3.5" ry="1.8" fill="#c4b6e0" transform="rotate(20 50 13)"/>
+          </svg>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- VOICES — 入居者・ご家族の声 -->
+    <section class="voices" id="voices" data-screen-label="04.5 Voices">
+      <div class="trust-title">
+        <div class="eyebrow">Voices</div>
+        <h3>ここで暮らす人、<em class="accent-char">支える</em>人の声。</h3>
+        <p>実際にWITHハピネス立川で過ごすご本人と、見守るご家族からいただいた言葉です。</p>
+      </div>
+      <div class="voices-grid">
+        <div class="voice-card">
+          <span class="quote-mark">“</span>
+          <p>朝のごはんが楽しみで、自然と起きられるようになりました。困ったときにすぐ声をかけられる距離感が、ちょうどいいです。</p>
+          <div class="who">
+            <div class="av"><svg width="20" height="20" viewBox="0 0 120 120"><use href="#flower-pink"/></svg></div>
+            <div class="meta"><b>入居者 K さん</b><span>50代・入居2年目</span></div>
+          </div>
+        </div>
+        <div class="voice-card">
+          <span class="quote-mark">“</span>
+          <p>離れて暮らす私たち家族にも、変化があるたびに連絡をくださる。「ここなら任せられる」と心から思えました。</p>
+          <div class="who">
+            <div class="av"><svg width="18" height="20" viewBox="0 0 100 120"><use href="#leaf-sprig"/></svg></div>
+            <div class="meta"><b>ご家族 M 様</b><span>入居者のお姉さま</span></div>
+          </div>
+        </div>
+        <div class="voice-card">
+          <span class="quote-mark">“</span>
+          <p>「できることは自分で」を尊重してもらえる。見守られている安心感はあるのに、押し付けられない。そのバランスが心地よいです。</p>
+          <div class="who">
+            <div class="av"><svg width="20" height="20" viewBox="0 0 120 120"><use href="#flower-yellow"/></svg></div>
+            <div class="meta"><b>入居者 T さん</b><span>40代・入居1年目</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 料金 -->
+    <section class="fee" id="fee" data-screen-label="05 Fee">
+      <img class="fee-img" src="assets/fee.png" alt="料金について、正直にお伝えします。"/>
+    </section>
+    <section class="fee fee-old" hidden style="display:none">
+      <svg class="fee-deco" width="76" height="76" viewBox="0 0 120 120"><use href="#flower-blue"/></svg>
+      <div class="fee-wrap">
+        <div class="fee-head">
+          <div>
+            <div class="ex">月額例（2階洋室8畳・朝夕食あり）</div>
+            <div class="total">¥68,000<small>/月</small></div>
+          </div>
+          <div class="note">※ 鳥取市特定障害者給付の家賃補助を差し引く前の金額</div>
+        </div>
+        <div class="fee-grid">
+          <div class="fee-col">
+            <h6>家賃（部屋別）</h6>
+            <div class="fee-row"><span>1階和室 8畳 ①②</span><span>¥21,500</span></div>
+            <div class="fee-row"><span>2階洋室 8畳 ③</span><span>¥21,000</span></div>
+            <div class="fee-row"><span>2階洋室 5畳 ④</span><span>¥17,400</span></div>
+            <div class="fee-row"><span>2階洋室 10畳 ⑤</span><span>¥25,800</span></div>
+          </div>
+          <div class="fee-col">
+            <h6>共通費用（月額）</h6>
+            <div class="fee-row"><span>水道光熱費</span><span>¥18,000</span></div>
+            <div class="fee-row"><span>日用品費</span><span>¥5,000</span></div>
+            <div class="fee-row"><span>食費目安（朝夕 ¥800×30日）</span><span>¥24,000</span></div>
+            <div class="fee-row"><span>朝食 ¥300／夕食 ¥500</span><span>都度</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Q&A — よくある不安 -->
+    <section class="qa" id="qa" data-screen-label="05.5 Q&A">
+      <svg class="qa-deco l" width="64" height="64" viewBox="0 0 120 120"><use href="#flower-yellow"/></svg>
+      <svg class="qa-deco r" width="56" height="56" viewBox="0 0 120 120"><use href="#flower-blue"/></svg>
+      <div class="trust-title">
+        <div class="eyebrow">Q &amp; A</div>
+        <h3>はじめての方の、<em class="accent-char warm">よくある不安</em>。</h3>
+        <p>お金のこと、医療のこと、もしものとき。気になることは、見学のときに何でもお尋ねください。</p>
+      </div>
+      <div class="qa-list">
+        <div class="qa-item">
+          <div class="q"><span class="badge">Q</span><span>家賃や生活費は、毎月いくらくらいかかりますか？</span></div>
+          <div class="a"><span class="badge">A</span><p>お部屋により家賃17,400〜25,800円。これに水道光熱費・日用品費・食費が加わります。鳥取市の家賃補助が適用される場合があり、個別のお見積りもお出しできます。</p></div>
+        </div>
+        <div class="qa-item">
+          <div class="q"><span class="badge">Q</span><span>通院や服薬のサポートはありますか？</span></div>
+          <div class="a"><span class="badge">A</span><p>通院の付き添いは追加費用なしで対応しています。服薬の見守りも行い、必要に応じて医療機関・主治医と連携します。</p></div>
+        </div>
+        <div class="qa-item">
+          <div class="q"><span class="badge">Q</span><span>夜間や体調が急に悪くなったときは？</span></div>
+          <div class="a"><span class="badge">A</span><p>365日、夜間もスタッフが常駐しています。急な体調変化の際は、ご家族・関係機関へすみやかにご連絡し、必要な対応をとります。</p></div>
+        </div>
+        <div class="qa-item">
+          <div class="q"><span class="badge">Q</span><span>まずは雰囲気だけ見たいのですが、可能ですか？</span></div>
+          <div class="a"><span class="badge">A</span><p>もちろんです。ご本人・ご家族・支援者さま、どなたでも。見学のみ・ご相談のみでも歓迎しています。お気軽にどうぞ。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 見学から、ご入居までのフロー -->
+    <section class="trial" id="visit" data-screen-label="06 Visit">
+      <div class="visit-flow">
+        <img class="visit-flow-bg" src="assets/visit-flow.png" alt="はじめての方へ、4つのステップ（ご相談 → ホーム見学 → 体験入居 → ご契約・ご入居）"/>
+      </div>
+      <div class="visit-cta" style="display:none">
+        <button class="btn accent lg">見学のお申込み →</button>
+        <button class="btn soft lg">☎ 0857-30-4162</button>
+      </div>
+    </section>
+
+    <!-- ケアマネージャー・相談支援専門員の皆さまへ -->
+    <section class="careplan" id="careplan" data-screen-label="06.7 Care">
+      <img class="careplan-img" src="assets/img-d.png" alt="ケアマネージャー・相談支援専門員の皆さまへ。安心してご紹介いただける住まいを目指しています。"/>
+    </section>
+
+    <!-- CARE MANAGER TRUST BLOCK -->
+    <section class="care-trust" data-screen-label="06.8 Care Flow">
+      <div class="care-head">
+        <div class="lead">
+          <div class="trust-title" style="text-align:left;">
+            <div class="eyebrow">For Care Managers</div>
+            <h3>ご紹介後も、<em class="accent-char">途切れない</em>連携を。</h3>
+            <p>定期的なご報告から、気になる変化の一報まで。過不足のない情報共有で、安心してお任せいただける体制を整えています。</p>
+          </div>
+        </div>
+        <div class="vacancy">
+          <div><span class="dot"></span><span class="status">空室 1室・受付中</span></div>
+          <div class="sub">2026年6月現在 ／ 受け入れ可否はお問い合わせください</div>
+        </div>
+      </div>
+      <div class="care-flow">
+        <div class="care-step">
+          <div class="st-no">STEP 01</div>
+          <h5>ご相談・情報共有</h5>
+          <p>対象者の状況やご希望を伺い、受け入れ可否を丁寧に判断します。</p>
+        </div>
+        <div class="care-step">
+          <div class="st-no">STEP 02</div>
+          <h5>見学・体験</h5>
+          <p>ご本人・ご家族とともに、実際の暮らしを体験いただけます。</p>
+        </div>
+        <div class="care-step">
+          <div class="st-no">STEP 03</div>
+          <h5>ご入居・初期共有</h5>
+          <p>関係機関・主治医と連携し、入居初期の不安を一緒に支えます。</p>
+        </div>
+        <div class="care-step">
+          <div class="st-no">STEP 04</div>
+          <h5>継続モニタリング</h5>
+          <p>定期報告・訪問同席で、変化を共有しながら支援を最適化します。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- アクセス -->
+    <div class="section-title" id="access" data-screen-label="07 Access">
+      <div class="eyebrow">Access</div>
+      <h3>立川町の、<em class="accent-char">みんな</em>の家。</h3>
+      <p>鳥取駅より車で約10分。周辺には日々のくらしを支えるお店や学校があります。</p>
+    </div>
+    <section class="access">
+      <div class="access-wrap">
+        <div class="map-box">
+          <div class="pin main" style="left:50%; top:52%;"><div class="dot">家</div><div class="label">WITHハピネス</div></div>
+          <div class="pin" style="left:28%; top:36%;"><div class="dot"></div><div class="label">エスマート緑町 50m</div></div>
+          <div class="pin" style="left:72%; top:28%;"><div class="dot"></div><div class="label">東中学校 190m</div></div>
+          <div class="pin" style="left:80%; top:70%;"><div class="dot"></div><div class="label">スシロー 550m</div></div>
+          <div class="pin" style="left:20%; top:74%;"><div class="dot"></div><div class="label">トライアル 650m</div></div>
+          <div class="pin" style="left:12%; top:18%;"><div class="dot"></div><div class="label">鳥取駅 2.5km</div></div>
+        </div>
+        <div class="access-info">
+          <h5>Contact</h5>
+          <div class="addr">鳥取県鳥取市<br/>立川町6丁目207</div>
+          <div class="tel">0857-30-4162</div>
+          <div style="font-size:11px; color:var(--w-ink-soft); margin-bottom:14px;">FAX 0857-30-4163</div>
+          <div class="row"><span>電車／車</span><span>鳥取駅より2.5km・車で約10分</span></div>
+          <div class="row"><span>Instagram</span><span>@grouphome_withhappiness</span></div>
+          <div class="row"><span>営業時間</span><span>365日・夜間スタッフ常駐</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRUST BADGES -->
+    <section class="trust-badges" data-screen-label="07.5 Credentials">
+      <div class="trust-badge">
+        <div class="tb-ic">認</div>
+        <div><b>指定共同生活援助事業所</b>鳥取県指定 ／ 障害福祉サービス</div>
+      </div>
+      <div class="trust-badge">
+        <div class="tb-ic">運</div>
+        <div><b>株式会社 WITHHOLDINGS</b>鳥取市立川町6丁目207</div>
+      </div>
+      <div class="trust-badge">
+        <div class="tb-ic">連</div>
+        <div><b>医療・行政・就労先と連携</b>地域に開かれた運営</div>
+      </div>
+      <div class="trust-badge">
+        <div class="tb-ic">守</div>
+        <div><b>365日 夜間スタッフ常駐</b>個人情報保護を徹底</div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="final" data-screen-label="08 Final CTA">
+      <svg class="final-flower" width="110" height="110"><use href="#flower-pink"/></svg>
+      <svg class="final-flower2" width="90" height="90"><use href="#flower-yellow"/></svg>
+      <h3>「ここなら<em class="accent-char sun" style="color:#fff4c7;">大丈夫</em>」を、見に来てください。</h3>
+      <p>まずは見学から。オンライン・電話でのご相談もお気軽にどうぞ。<br/>ご家族・ケースワーカー様からのご相談も歓迎しています。</p>
+      <div class="ctas">
+        <button class="btn lg">見学を申し込む →</button>
+        <button class="btn ghost lg">☎ 0857-30-4162 に電話する</button>
+        <button class="btn ghost lg">資料請求／お問い合わせ</button>
+        <button class="btn ghost lg">Instagram を見る</button>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="footer" data-screen-label="09 Footer">
+      <div class="grid">
+        <div>
+          <div class="brand">グループホーム withハピネス立川<br/><small style="font-size:10px; opacity:.7; font-weight:500;">株式会社 WITHHOLDINGS</small></div>
+          <ul style="margin-top:10px; opacity:.7;">
+            <li>〒xxx-xxxx 鳥取県鳥取市立川町6丁目207</li>
+            <li>TEL 0857-30-4162 ／ FAX 0857-30-4163</li>
+            <li>運営：株式会社 WITHHOLDINGS</li>
+          </ul>
+        </div>
+        <div>
+          <h6>About</h6>
+          <ul><li>私たちの想い</li><li>4つの特徴</li><li>会社概要</li><li>採用情報</li></ul>
+        </div>
+        <div>
+          <h6>Services</h6>
+          <ul><li>1日の流れ</li><li>料金</li><li>見学案内</li><li>入居までの流れ</li></ul>
+        </div>
+        <div>
+          <h6>Connect</h6>
+          <ul><li>お問い合わせ</li><li>資料請求</li><li>Instagram</li><li>アクセス</li></ul>
+        </div>
+      </div>
+      <div class="copy"><span>© 2026 withハピネス ／ 株式会社 WITHHOLDINGS</span><span>プライバシーポリシー ／ 利用規約</span></div>
+    </footer>
+
+  </div>
+</div>
+
+<!-- Tweaks -->
+<div class="tweaks" id="tweaks">
+  <button class="close" onclick="window.__toggleTweaks(false)">×</button>
+  <h3>Tweaks</h3>
+  <div class="hint">V3×A フル構成ワイヤー。切替はリアルタイム反映。</div>
+
+  <div class="group">
+    <div class="label">配色ムード</div>
+    <div class="row" data-group="mood">
+      <button class="chip" data-v="park">朝の公園（水色＋黄緑）</button>
+      <button class="chip" data-v="sky">水色寄り</button>
+      <button class="chip" data-v="leaf">草木の緑寄り</button>
+      <button class="chip" data-v="sage">セージ（前案）</button>
+    </div>
+  </div>
+  <div class="group">
+    <div class="label">手描き風 ↔ 整った線</div>
+    <div class="row" data-group="stroke">
+      <button class="chip" data-v="clean">整った線</button>
+      <button class="chip" data-v="sketchy">手描き風</button>
+    </div>
+  </div>
+  <div class="group">
+    <div class="label">密度</div>
+    <div class="row" data-group="density">
+      <button class="chip" data-v="loose">ゆったり</button>
+      <button class="chip" data-v="normal">標準</button>
+      <button class="chip" data-v="tight">ぎっしり</button>
+    </div>
+  </div>
+  <div class="group">
+    <div class="label">ヒーローコピー</div>
+    <div class="row" data-group="copy">
+      <button class="chip" data-v="daijoubu">「ここなら大丈夫」</button>
+      <button class="chip" data-v="okaeri">「ただいま」</button>
+      <button class="chip" data-v="scenery">「当たり前の景色」</button>
+      <button class="chip" data-v="custom">自由記述</button>
+    </div>
+    <textarea id="copyText" placeholder="自由記述のコピーをここに…" style="margin-top:8px; display:none"></textarea>
+  </div>
+</div>
+
+<script>
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "mood": "park",
+  "stroke": "clean",
+  "density": "normal",
+  "copyKind": "daijoubu",
+  "copyCustom": ""
+}/*EDITMODE-END*/;
+
+const COPY = {
+  daijoubu: 'ここなら、大丈夫。\nそう思える、おうち。',
+  okaeri:   'ただいま、\nっておかえり。',
+  scenery:  '「福祉施設だったの？」\nそう言われるくらい、\n当たり前の景色でありたい。',
+};
+
+function applyTweaks(t) {
+  document.body.dataset.mood = t.mood;
+  document.body.dataset.stroke = t.stroke;
+  document.body.dataset.density = t.density;
+  const h = document.getElementById('heroCopy');
+  const copy = (t.copyKind === 'custom' && t.copyCustom.trim()) ? t.copyCustom : COPY[t.copyKind];
+  if (h) h.style.whiteSpace = 'pre-line';
+  if (h && copy) h.textContent = copy;
+  document.getElementById('copyText').style.display = (t.copyKind === 'custom') ? 'block' : 'none';
+  // chips
+  document.querySelectorAll('.tweaks [data-group]').forEach((row) => {
+    const g = row.dataset.group;
+    const v = g === 'mood' ? t.mood : g === 'stroke' ? t.stroke : g === 'density' ? t.density : t.copyKind;
+    row.querySelectorAll('.chip').forEach((b) => b.classList.toggle('active', b.dataset.v === v));
+  });
+}
+const state = { ...TWEAK_DEFAULTS };
+applyTweaks(state);
+
+function setTw(patch) {
+  Object.assign(state, patch);
+  applyTweaks(state);
+  window.parent?.postMessage({ type: '__edit_mode_set_keys', edits: patch }, '*');
+}
+
+document.querySelectorAll('.tweaks [data-group]').forEach((row) => {
+  const g = row.dataset.group;
+  row.querySelectorAll('.chip').forEach((b) => {
+    b.addEventListener('click', () => {
+      const v = b.dataset.v;
+      if (g === 'mood') setTw({ mood: v });
+      else if (g === 'stroke') setTw({ stroke: v });
+      else if (g === 'density') setTw({ density: v });
+      else if (g === 'copy') setTw({ copyKind: v });
+    });
+  });
+});
+document.getElementById('copyText').addEventListener('input', (e) => {
+  setTw({ copyCustom: e.target.value, copyKind: 'custom' });
+});
+
+window.__toggleTweaks = (open) => document.getElementById('tweaks').classList.toggle('open', open);
+window.addEventListener('message', (e) => {
+  const d = e.data || {};
+  if (d.type === '__activate_edit_mode') window.__toggleTweaks(true);
+  if (d.type === '__deactivate_edit_mode') window.__toggleTweaks(false);
+});
+window.parent?.postMessage({ type: '__edit_mode_available' }, '*');
+
+// Flower bloom click effect
+(function(){
+  const petalColors = [
+    ['#f4b5c7','#e89bb0'], // pink
+    ['#f4c95d','#f0b940'], // yellow
+    ['#9ad4e3','#7ec3d4'], // blue
+    ['#f4b5c7','#f4c95d'], // mix
+  ];
+  function makeFlowerSVG(colors){
+    return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g transform="translate(50 50)">
+      <g>${[0,72,144,216,288].map((r,i)=>`<ellipse cx="0" cy="-26" rx="14" ry="22" fill="${i%2?colors[1]:colors[0]}" transform="rotate(${r})"/>`).join('')}</g>
+      <circle r="10" fill="#f4c95d"/><circle cx="-3" cy="-3" r="3" fill="#fff4c7" opacity=".9"/>
+    </g></svg>`;
+  }
+  function bloom(x,y){
+    const colors = petalColors[Math.floor(Math.random()*petalColors.length)];
+    // Big flower pop
+    const flower = document.createElement('div');
+    flower.className = 'bloom';
+    flower.style.left = x+'px';
+    flower.style.top = y+'px';
+    flower.innerHTML = makeFlowerSVG(colors);
+    document.body.appendChild(flower);
+    flower.addEventListener('animationend', () => flower.remove());
+    // Petal burst
+    const burst = document.createElement('div');
+    burst.className = 'petal-burst';
+    burst.style.left = x+'px';
+    burst.style.top = y+'px';
+    const N = 8;
+    for (let i=0;i<N;i++){
+      const p = document.createElement('div');
+      p.className = 'petal';
+      const angle = (i/N) * Math.PI * 2 + Math.random()*0.4;
+      const dist = 50 + Math.random()*40;
+      p.style.setProperty('--dx', Math.cos(angle)*dist + 'px');
+      p.style.setProperty('--dy', Math.sin(angle)*dist + 'px');
+      p.style.setProperty('--rot', (Math.random()*540-270)+'deg');
+      p.style.background = i%2 ? colors[0] : colors[1];
+      p.style.animationDelay = (Math.random()*60)+'ms';
+      burst.appendChild(p);
+    }
+    document.body.appendChild(burst);
+    setTimeout(()=>burst.remove(), 1000);
+  }
+  document.addEventListener('click', (e) => {
+    // skip clicks inside tweaks panel
+    if (e.target.closest && e.target.closest('.tweaks')) return;
+    bloom(e.clientX, e.clientY);
+  }, true);
+})();
+</script>
+</body>
+</html>
